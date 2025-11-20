@@ -159,4 +159,7 @@ iot-middleware-freertos-samples/
 # Local test script
 test.ps1
 
+# Ignore local MQTT helper (contains keys and live credentials)
+py/esp32_data.py
+
 
