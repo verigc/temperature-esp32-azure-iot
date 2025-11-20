@@ -156,4 +156,7 @@ iot-middleware-freertos-samples/
 
 *.csv
 
+# Local test script
+test.ps1
+
 
