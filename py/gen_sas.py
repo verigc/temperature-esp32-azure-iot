@@ -1,10 +1,30 @@
-# gen_sas.py
-import time, hmac, hashlib, base64, urllib.parse
+"""
+gen_sas.py
+Generador de SAS token de ejemplo que toma la clave del dispositivo desde la
+variable de entorno `DEVICE_KEY`. No debe contener la clave en el repositorio.
+"""
+import os
+import time
+import hmac
+import hashlib
+import base64
+import urllib.parse
 
-device_key = "xtU0RPRs4e3IOMIMZdXQCzsF+QzD+CNreuHsgPAxcsA="
-iothub_host = "master-esp32.azure-devices.net"
-device_id = "esp32"
+try:
+	from dotenv import load_dotenv
+	load_dotenv()
+except Exception:
+	# python-dotenv no es obligatorio; si no está instalado, se confiará en las VARS de entorno
+	pass
+
+# Leer clave y configuración desde variables de entorno
+device_key = os.getenv("DEVICE_KEY")
+iothub_host = os.getenv("IOTHUB_HOST", "master-esp32.azure-devices.net")
+device_id = os.getenv("DEVICE_ID", "esp32")
 expiry = str(int(time.time() + 3600))  # 1 hora
+
+if not device_key:
+	raise SystemExit("ERROR: DEVICE_KEY no está definida. Crea un archivo .env con DEVICE_KEY=... o exporta la variable en el entorno.")
 
 resource_uri = f"{iothub_host}/devices/{device_id}"
 to_sign = resource_uri + "\n" + expiry
